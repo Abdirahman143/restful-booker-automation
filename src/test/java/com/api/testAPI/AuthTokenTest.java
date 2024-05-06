@@ -3,7 +3,6 @@ package com.api.testAPI;
 import com.api.authentication.request.AuthRequest;
 import com.api.authentication.response.AuthResponse;
 import com.api.utils.AuthUtils;
-import com.api.utils.JsonDataLoader;
 import com.api.utils.TestData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +13,10 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class AuthTokenTests {
+public class AuthTokenTest {
 
     private String validToken;
-  public static final Logger logger =LoggerFactory.getLogger(AuthTokenTests.class);
+  public static final Logger logger =LoggerFactory.getLogger(AuthTokenTest.class);
 
 
 

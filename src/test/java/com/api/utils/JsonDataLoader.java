@@ -8,9 +8,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class JsonDataLoader {
-    public static AuthRequest loadLoginData(String path) throws IOException {
-        byte[] jsonData = Files.readAllBytes(Paths.get(path));
+
+    public static <T> T loadTestData(String filePath, Class<T> type) throws Exception {
+        byte[] jsonData = Files.readAllBytes(Paths.get(filePath));
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(jsonData, AuthRequest.class);
+        return objectMapper.readValue(jsonData, type);
     }
+
 }

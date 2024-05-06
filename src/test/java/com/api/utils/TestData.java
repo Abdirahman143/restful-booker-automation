@@ -10,9 +10,9 @@ public class TestData {
 
     static {
         try {
-            validLoginData = JsonDataLoader.loadLoginData("src/test/resources/testData/validLoginData.json");
-            invalidLoginData = JsonDataLoader.loadLoginData("src/test/resources/testData/invalidLoginData.json");
-        } catch (IOException e) {
+            validLoginData = JsonDataLoader.loadTestData("src/test/resources/testData/validLoginData.json",AuthRequest.class);
+            invalidLoginData = JsonDataLoader.loadTestData("src/test/resources/testData/invalidLoginData.json",AuthRequest.class);
+        } catch (Exception e) {
             throw new RuntimeException("Failed to load login data", e);
         }
     }
