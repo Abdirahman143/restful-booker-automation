@@ -12,7 +12,6 @@ import static io.restassured.RestAssured.*;
 
 public class AuthUtils {
     private static final Logger logger = LoggerFactory.getLogger(AuthUtils.class);
-    private static final String CONTENT_TYPE="application/json";
     private static ObjectMapper objectMapper=new ObjectMapper();
 
 
@@ -21,7 +20,7 @@ public class AuthUtils {
 
         Response response=
                 given().
-                        header("Content-Type",CONTENT_TYPE).
+                        header("Content-Type",BaseRoute.CONTENT_TYPE).
                         body(authRequest).
                         when().
                         post(BaseRoute.BASE_URL+"/auth").
