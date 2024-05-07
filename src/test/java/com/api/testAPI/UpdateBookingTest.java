@@ -3,6 +3,7 @@ package com.api.testAPI;
 import com.api.authentication.request.AuthRequest;
 import com.api.authentication.response.AuthResponse;
 import com.api.baseRoute.BaseRoute;
+import com.api.models.Request.BookingPartialRequest;
 import com.api.models.Request.BookingRequest;
 import com.api.models.Response.UpdateBookingResponse;
 import com.api.utils.AuthUtils;
@@ -73,5 +74,45 @@ public class UpdateBookingTest {
 
         logger.info("Booking created successfully with response payload: {}", response.asString());
 
+    }
+
+
+    @Test
+    public void partial_updateBooking_WithValidData_ShouldReturnSuccess() throws JsonProcessingException {
+        BookingPartialRequest partialRequest =
+                BookingPartialRequest.
+                builder().
+                        firstname("Abdirahman").
+                        lastname("Abdi").
+                build();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestBody = objectMapper.writeValueAsString(partialRequest);
+         int bookingId = 2;
+
+
+        logger.info("Generated Token: {}",token);
+
+        Response response = given().
+                header("Content-Type",BaseRoute.CONTENT_TYPE).
+                header("Cookie","token="+token)
+                .body(requestBody).
+                when()
+                .patch(BaseRoute.BASE_URL+"/booking/"+bookingId).
+                thenReturn();
+
+        assertThat(response.statusCode()).isEqualTo(200);
+
+        bookingResponse = new ObjectMapper().readValue(response.asString(),UpdateBookingResponse.class);
+
+        // Fluent API usage to check all fields
+        assertThat(bookingResponse)
+                .as("Check all booking details")
+                .isNotNull()
+                .satisfies(b -> {
+                    assertThat(b.getFirstname()).as("Check firstname").isEqualTo(updateBookingRequest.getFirstname());
+                    assertThat(b.getLastname()).as("Check lastname").isEqualTo(updateBookingRequest.getLastname());
+                });
+
+        logger.info("Booking created successfully with response payload: {}", response.asString());
     }
 }
