@@ -1,22 +1,22 @@
+package com.api.models.Response;
 
-package com.api.models.Request;
-
+import com.api.models.Request.BookingDates;
+import com.api.models.Request.BookingRequest;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class BookingRequest{
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UpdateBookingResponse {
     private String firstname;
     private String lastname;
     private int totalprice;
     private boolean depositpaid;
     private BookingDates bookingdates;
     private String additionalneeds;
-
 
 }

@@ -1,0 +1,12 @@
+{
+    "firstname": "Abdirahman",
+    "lastname": "Abdi",
+    "totalprice": 100,
+    "depositpaid": true,
+    "bookingdates": {
+      "checkin": "2023-06-04",
+      "checkout": "2024-06-04"
+    },
+    "additionalneeds": "Lunch"
+  }
+
