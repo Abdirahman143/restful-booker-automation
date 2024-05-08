@@ -17,20 +17,17 @@ import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.assertThat;
-
 public class CreateBookingTest {
 
     private String validToken;
     private static final Logger logger = LoggerFactory.getLogger(CreateBookingTest.class);
     private BookingRequest requestBody;
     private CreateBookingResponse bookingResponse;
-    private AuthResponse authResponse;
-    private AuthRequest authRequest;
 
     @BeforeClass
     public void setUp() {
-         authRequest = TestData.getValidLoginData();
-         authResponse = AuthUtils.getAuthToken( authRequest.getUsername(),  authRequest.getPassword());
+        AuthRequest loginCredential = TestData.getValidLoginData();
+        AuthResponse authResponse = AuthUtils.getAuthToken(loginCredential.getUsername(), loginCredential.getPassword());
         validToken = authResponse.getToken();
         logger.info("Generated Token: {}", validToken);
         requestBody = TestData.getBookingRequestData(); // Load data once if it doesn't change
