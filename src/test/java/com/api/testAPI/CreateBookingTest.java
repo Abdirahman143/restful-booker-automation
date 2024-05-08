@@ -24,11 +24,13 @@ public class CreateBookingTest {
     private static final Logger logger = LoggerFactory.getLogger(CreateBookingTest.class);
     private BookingRequest requestBody;
     private CreateBookingResponse bookingResponse;
+    private AuthResponse authResponse;
+    private AuthRequest authRequest;
 
     @BeforeClass
     public void setUp() {
-        AuthRequest loginCredential = TestData.getValidLoginData();
-        AuthResponse authResponse = AuthUtils.getAuthToken(loginCredential.getUsername(), loginCredential.getPassword());
+         authRequest = TestData.getValidLoginData();
+         authResponse = AuthUtils.getAuthToken( authRequest.getUsername(),  authRequest.getPassword());
         validToken = authResponse.getToken();
         logger.info("Generated Token: {}", validToken);
         requestBody = TestData.getBookingRequestData(); // Load data once if it doesn't change
