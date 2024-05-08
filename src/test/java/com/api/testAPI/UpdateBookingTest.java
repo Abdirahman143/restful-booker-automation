@@ -7,12 +7,18 @@ import com.api.models.Request.BookingPartialRequest;
 import com.api.models.Request.BookingRequest;
 import com.api.models.Response.UpdateBookingResponse;
 import com.api.utils.AuthUtils;
+import com.api.utils.ExtentManager;
 import com.api.utils.TestData;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -25,10 +31,13 @@ public class UpdateBookingTest {
     private BookingRequest updateBookingRequest;
     private String token ;
     private int bookingId =1;
+    private ExtentReports extent;
+    private ExtentTest test;
 
     @BeforeClass
     public void setUp(){
         logger.info("...Bofore setUp and token generation ");
+        extent = ExtentManager.getInstance();
 
         AuthRequest authRequest = TestData.getValidLoginData();
         AuthResponse authResponse = AuthUtils.getAuthToken(authRequest.getUsername(),authRequest.getPassword());
@@ -40,6 +49,8 @@ public class UpdateBookingTest {
 
     @Test
     public void updateBooking_WithValidData_ShouldReturnSuccess() throws JsonProcessingException {
+        //Test case Name:
+        test = extent.createTest("Verify updating booking with valid data should return success! ");
         logger.info("Token: {}", token);
         Response response = given().
                 header("Content-Type", BaseRoute.CONTENT_TYPE).
@@ -79,6 +90,9 @@ public class UpdateBookingTest {
 
     @Test
     public void partial_updateBooking_WithValidData_ShouldReturnSuccess() throws JsonProcessingException {
+        //Test case Name:
+        test = extent.createTest("Verify partial updating booking with valid data should return success! ");
+
         BookingPartialRequest partialRequest =
                 BookingPartialRequest.
                 builder().
@@ -114,5 +128,20 @@ public class UpdateBookingTest {
                 });
 
         logger.info("Booking created successfully with response payload: {}", response.asString());
+    }
+
+
+
+    @AfterMethod
+    public void tearDown(ITestResult result) {
+        if (result.getStatus() == ITestResult.FAILURE) {
+            test.log(Status.FAIL, "Failed: " + result.getName());
+            test.log(Status.FAIL, "Cause: " + result.getThrowable());
+        } else if (result.getStatus() == ITestResult.SKIP) {
+            test.log(Status.SKIP, "Skipped: " + result.getName());
+        } else {
+            test.log(Status.PASS, "Passed: " + result.getName());
+        }
+        extent.flush();
     }
 }
