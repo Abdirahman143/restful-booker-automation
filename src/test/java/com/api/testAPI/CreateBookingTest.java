@@ -6,12 +6,18 @@ import com.api.baseRoute.BaseRoute;
 import com.api.models.Request.BookingRequest;
 import com.api.models.Response.CreateBookingResponse;
 import com.api.utils.AuthUtils;
+import com.api.utils.ExtentManager;
 import com.api.utils.TestData;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -23,9 +29,12 @@ public class CreateBookingTest {
     private static final Logger logger = LoggerFactory.getLogger(CreateBookingTest.class);
     private BookingRequest requestBody;
     private CreateBookingResponse bookingResponse;
+    private ExtentReports extent;
+    private ExtentTest test;
 
     @BeforeClass
     public void setUp() {
+        extent = ExtentManager.getInstance();
         AuthRequest loginCredential = TestData.getValidLoginData();
         AuthResponse authResponse = AuthUtils.getAuthToken(loginCredential.getUsername(), loginCredential.getPassword());
         validToken = authResponse.getToken();
@@ -35,6 +44,8 @@ public class CreateBookingTest {
 
     @Test
     public void createBooking_WithValidDetails_ShouldReturnStatusCode200() {
+        //Test case Name:
+        test = extent.createTest("Verify create booking details with valid data should return success! ");
         Response response = given()
                 .header("Content-Type", "application/json")
                 .body(requestBody)
@@ -57,6 +68,19 @@ public class CreateBookingTest {
                 });
 
         logger.info("Booking created successfully with response payload: {}", response.asString());
+    }
+
+    @AfterMethod
+    public void tearDown(ITestResult result) {
+        if (result.getStatus() == ITestResult.FAILURE) {
+            test.log(Status.FAIL, "Failed: " + result.getName());
+            test.log(Status.FAIL, "Cause: " + result.getThrowable());
+        } else if (result.getStatus() == ITestResult.SKIP) {
+            test.log(Status.SKIP, "Skipped: " + result.getName());
+        } else {
+            test.log(Status.PASS, "Passed: " + result.getName());
+        }
+        extent.flush();
     }
 
 }
