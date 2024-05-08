@@ -14,7 +14,6 @@ public class AuthUtils {
     private static final Logger logger = LoggerFactory.getLogger(AuthUtils.class);
     private static ObjectMapper objectMapper=new ObjectMapper();
 
-
     public static AuthResponse getAuthToken(String username, String password){
         AuthRequest authRequest = new AuthRequest(username,password);
 
